@@ -16,17 +16,7 @@ function mainSetup() {
 	populateTokenList(idUL_SOU, ulInfoSOU);
 }
 
-const ulInfoSOU = ["Stückliste der Baugruppe aufrufen", "Reporte -> Mengenstückliste", "In Zwischenablage speichern", "Neue Excel-Datei öffnen", "Zwischenablage in Zelle A1 kopieren", "Mit beliebigem Namen speichern", "Der Dateiname wird für die Vergleichsdatei verwendet"];
-
-const fileData = {
-	rawData: {},
-	outputName: "",
-};
-
-const dataObject = {
-	partData: {},
-	listData: {},
-};
+const ulInfoSOU = ["Hallo Marina, Infos kommen noch"];
 
 function openInfoSOU() {
 	KadUtils.dbID(idDia_SOU).showModal();
@@ -43,6 +33,11 @@ function populateTokenList(parentID, list) {
 		ulParent.append(li);
 	}
 }
+
+const fileData = {
+	rawData: {},
+	outputName: "",
+};
 
 function getFile(file) {
 	fileData.rawData = {};
@@ -61,36 +56,10 @@ function getFile(file) {
 			let title = Object.keys(data[0]).includes("Ebene") ? "Struktur" : "Menge";
 			fileData.rawData[title] = data;
 		});
-		console.log(fileData.rawData);
 		fileIsParsed();
-		parseFileExcel();
+		parseFile();
 	};
 	fileReader.readAsBinaryString(selectedFile);
-}
-
-const mmID = "ArtikelNr";
-const name = "Bezeichnung";
-const count = "Menge";
-const sparePart = "Ersatzteil";
-const wearPart = "Verschleissteil";
-const partFamily = "ArtikelTeileFamilie";
-const partDataFields = [mmID, name, count, sparePart, wearPart, "parents", "children"];
-
-function parseFileExcel() {
-	dataObject.partData = {};
-
-	for (let obj of fileData.rawData.Menge) {
-		if (obj[sparePart] == "true" || obj[wearPart] == "true") {
-			let id = Number(obj[mmID]); // get MM-Nummer
-			dataObject.partData[id] = {};
-			for (let field of partDataFields) {
-				dataObject.partData[id][field] = obj[field];
-			}
-		}
-	}
-	KadUtils.dbID(idLbl_loadedSOU).textContent = `${KadUtils.objectLength(dataObject.partData)} Teile gefunden`;
-
-	console.log(dataObject.partData);
 }
 
 function fileIsParsed() {
@@ -101,67 +70,71 @@ function fileIsParsed() {
 }
 
 // -----------------------------
-function startCompare() {
-	dataObject.compared = {};
-	dataObject.notInSOU = {};
-	dataObject.notInCAD = {};
-	dataObject.tokenlist = {};
 
-	for (let token of [...Tokenlist[0], ...Tokenlist[1]]) {
-		let found = false;
-		for (let [souKey, souValue] of Object.entries(dataObject.SOU)) {
-			if (souValue[name].toLowerCase().includes(token.toLowerCase())) {
-				found = true;
-				dataObject.tokenlist[souKey] = {
-					[mmID]: souValue[mmID],
-					SOU: souValue[count],
-					[name]: souValue[name],
-					[partFamily]: souValue[partFamily] ? souValue[partFamily] : "---",
-				};
+const mmID = "ArtikelNr";
+const name = "Bezeichnung";
+const count = "Menge";
+const sparePart = "Ersatzteil";
+const wearPart = "Verschleissteil";
+const partFamily = "ArtikelTeileFamilie";
+const partDataFields = [mmID, name, count, sparePart, partFamily, wearPart];
+
+const dataObject = {
+	partData: {},
+	listData: {},
+	topDownList: {},
+};
+
+function parseFile() {
+	dataObject.partData = {};
+	for (let obj of fileData.rawData.Menge) {
+		if (obj[sparePart] == "true" || obj[wearPart] == "true") {
+			let id = Number(obj[mmID]); // get MM-Nummer
+			dataObject.partData[id] = {};
+			for (let field of partDataFields) {
+				dataObject.partData[id][field] = obj[field];
+			}
+			dataObject.partData[id]["parents"] = {};
+		}
+	}
+
+	KadUtils.dbID(idLbl_loadedSOU).textContent = `${KadUtils.objectLength(dataObject.partData)} Teile gefunden`;
+
+	dataObject.topDownList = {};
+	for (let i = 0; i < fileData.rawData.Struktur.length; i++) {
+		const obj = fileData.rawData.Struktur[i];
+
+		if (dataObject.partData.hasOwnProperty(Number(obj[mmID]))) {
+			const id = Number(obj[mmID]);
+			dataObject.partData[id].level = Number(obj.Ebene);
+
+			// find all parents
+			let currentLevel = Number(obj.Ebene);
+			for (let p = i - 1; p > 0; p--) {
+				const prevLevel = Number(fileData.rawData.Struktur[p].Ebene);
+				if (prevLevel < currentLevel) {
+					currentLevel = prevLevel;
+					const parentID = Number(fileData.rawData.Struktur[p][mmID]);
+					if (!dataObject.partData[id].parents.hasOwnProperty(parentID)) {
+						dataObject.partData[id].parents[parentID] = currentLevel;
+						if (!dataObject.topDownList[currentLevel]) dataObject.topDownList[currentLevel] = new Set();
+						dataObject.topDownList[currentLevel].add(parentID);
+					}
+				}
 			}
 		}
-		if (!found) {
-			dataObject.tokenlist[token] = {
-				[mmID]: token,
-				SOU: 0,
-				[name]: "nicht vorhanden",
-				[partFamily]: "",
-			};
-		}
 	}
+	// console.log(KadUtils.objectLength(dataObject.partData), dataObject.partData);
 
-	for (let [souKey, souValue] of Object.entries(dataObject.SOU)) {
-		const cadCount = dataObject.CAD[souKey] == null ? 0 : dataObject.CAD[souKey][count];
-		dataObject.compared[souKey] = {
-			[mmID]: souValue[mmID],
-			SOU: souValue[count],
-			CAD: cadCount,
-			[name]: souValue[name],
-			[partFamily]: souValue[partFamily] ? souValue[partFamily] : "---",
-			[foundInSOU]: true,
-			[foundInCAD]: cadCount == 0 ? false : true,
-		};
-		if (cadCount == 0) dataObject.notInCAD[souKey] = dataObject.compared[souKey];
+	for (let key of Object.keys(dataObject.topDownList)) {
+		dataObject.topDownList[key] = Array.from(dataObject.topDownList[key]);
 	}
-
-	for (let [cadKey, cadValue] of Object.entries(dataObject.CAD)) {
-		if (dataObject.compared[cadKey] === undefined) {
-			dataObject.compared[cadKey] = {
-				[mmID]: cadValue[mmID],
-				SOU: 0,
-				CAD: cadValue[count],
-				[name]: cadValue[name],
-				[partFamily]: cadValue[partFamily],
-				[foundInSOU]: false,
-				[foundInCAD]: true,
-			};
-			dataObject.notInSOU[cadKey] = dataObject.compared[cadKey];
-		}
-	}
+	console.log(dataObject.topDownList);
 
 	KadUtils.KadDOM.enableBtn(idBtn_download, true);
 }
 
+// -----------------------------
 function startDownload() {
 	const book = utils.book_new();
 	const sheetDiff = utils.json_to_sheet(Object.values(dataObject.difference));
