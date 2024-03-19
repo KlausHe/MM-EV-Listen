@@ -1,0 +1,39 @@
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>MM-EV-Liste</title>
+  <link href="style.css" rel="stylesheet" type="text/css">
+
+  <script type="module" src="Main.js"></script>
+</head>
+
+<body>
+  <dialog id="idDia_SOU">
+    <fieldset>
+      <legend>SOU-Stücklistendatei erstellen</legend>
+      <ol id="idUL_SOU">
+      </ol>
+      <button type="button" id="idBtn_infoCloseSOU" autofocus>Schließen</button>
+    </fieldset>
+  </dialog>
+  <main>
+    <div>
+      <h1>MM-EV-Liste</h1>
+    </div>
+    <fieldset>
+      <legend>Listen Hochladen</legend>
+      <div><label class="cl_infoBTN" uiRadius="left" uiSize="size7" id="idLbl_inputSOU" for="idVin_inputSOU">SOU-Liste als ".xlsx"<input type="file" id="idVin_inputSOU" accept=".xlsx" hidden></input>
+        </label><button type="button" id="idBtn_infoSOU" uiSize="size1" uiRadius="none"><img src="Data/cInfo.svg"></img></button><label class="cl_info" uiRadius="right" id="idLbl_loadedSOU"></label>
+      </div>
+    </fieldset>
+    <fieldset>
+      <legend>Download</legend>
+      <div><button uiRadius="left" id="idBtn_download">Download</button><label class="cl_info" uiRadius="right" id="idLbl_fileName"></label></div>
+    </fieldset>
+  </main>
+</body>
+
+</html>
