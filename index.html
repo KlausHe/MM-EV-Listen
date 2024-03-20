@@ -11,11 +11,19 @@
 </head>
 
 <body>
+  <dialog id="idDia_Upload">
+    <fieldset>
+      <legend>Hauptanlage in Stückliste einfügen</legend>
+      <ul id="idUL_Upload">
+      </ul>
+      <button type="button" id="idBtn_infoCloseUpload" autofocus>Schließen</button>
+    </fieldset>
+  </dialog>
   <dialog id="idDia_SOU">
     <fieldset>
       <legend>SOU-Stücklistendatei erstellen</legend>
-      <ol id="idUL_SOU">
-      </ol>
+      <ul id="idUL_SOU">
+      </ul>
       <button type="button" id="idBtn_infoCloseSOU" autofocus>Schließen</button>
     </fieldset>
   </dialog>
@@ -24,7 +32,10 @@
       <h1>MM-EV-Liste</h1>
     </div>
     <fieldset>
-      <legend>Listen Hochladen</legend>
+      <legend><button type="button" id="idBtn_infoUpload" uiSize="size1"><img src="Data/cInfo.svg"></img></button>Listen Hochladen</legend>
+      <div>
+        <input type="number" uiRadius="left" id="idVin_mainAssemblyNr"></input><input type="text" uiRadius="right" id="idVin_mainAssemblyName"></input>
+      </div>
       <div><label class="cl_infoBTN" uiRadius="left" uiSize="size7" id="idLbl_inputSOU" for="idVin_inputSOU">SOU-Liste als ".xlsx"<input type="file" id="idVin_inputSOU" accept=".xlsx" hidden></input>
         </label><button type="button" id="idBtn_infoSOU" uiSize="size1" uiRadius="none"><img src="Data/cInfo.svg"></img></button><label class="cl_info" uiRadius="right" id="idLbl_loadedSOU"></label>
       </div>
