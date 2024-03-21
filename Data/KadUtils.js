@@ -420,7 +420,7 @@ export const KadString = {
 	firstLetterCap(s) {
 		if (s == "") return s;
 		if (typeof s != "string") return s;
-		return s[0].toUpperCase() + s.slice(1);
+		return s[0].toUpperCase() + s.slice(1).toLowerCase();
 	},
 	firstLetterLow(s) {
 		if (s == "") return s;

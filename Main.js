@@ -26,7 +26,7 @@ function mainSetup() {
 	populateTokenList(idUL_SOU, ulInfoSOU);
 }
 
-const ulInfoUpload = ["MM-Nummer der Hauptanlage im linken Feld eintragen","Der Anlagenname im rechten Feld ist optional.",'Der Button "SOU-Liste als *.xlsx" ist blockiert wenn keine MM-Nummer der Anlage eingegeben wurde'];
+const ulInfoUpload = ["MM-Nummer der Hauptanlage im linken Feld eintragen", "Der Anlagenname im rechten Feld ist optional.", 'Der Button "SOU-Liste als *.xlsx" ist blockiert wenn keine MM-Nummer der Anlage eingegeben wurde'];
 const ulInfoSOU = ['Mengenstückliste und Strukturstückliste mit "Zwischenablage (Daten)" auf 2 Tabellenblätter in einer Datei speichern.'];
 
 function openInfoUpload() {
@@ -73,7 +73,10 @@ function getMainName(event) {
 }
 
 const fileData = {
-	rawData: {},
+	rawData: {
+		Menge: null,
+		Struktur: null,
+	},
 	outputName: "",
 };
 
@@ -86,11 +89,19 @@ function getFile(file) {
 	fileReader.onload = (event) => {
 		const data = event.target.result;
 		let workbook = read(data, { type: "binary" });
+		let error = 2;
 		workbook.SheetNames.forEach((sheet) => {
-			const data = utils.sheet_to_row_object_array(workbook.Sheets[sheet]);
-			let title = Object.keys(data[0]).includes("Ebene") ? "Struktur" : "Menge";
-			fileData.rawData[title] = data;
+			const title = KadUtils.KadString.firstLetterCap(sheet);
+			if (title == "Struktur" || title == "Menge") {
+				error--;
+				const data = utils.sheet_to_row_object_array(workbook.Sheets[sheet]);
+				fileData.rawData[title] = data;
+			}
 		});
+		if (error < 0) {
+			alert('Tabellenblätter müssen mit "Struktur" und "Menge" beschriftet sein!');
+			return;
+		}
 		fileIsParsed();
 		parseFile();
 	};
@@ -136,7 +147,6 @@ function parseFile() {
 		children: [],
 		level: 0,
 	};
-
 	fileData.rawData.Struktur.unshift({
 		ArtikelArt: "F",
 		ArtikelNr: mainNumber,
@@ -162,7 +172,6 @@ function parseFile() {
 			dataObject.evArray.push(id);
 		}
 	}
-
 	KadUtils.dbID(idLbl_loadedSOU).textContent = `${dataObject.evArray.length} E/V-Teile gefunden`;
 
 	for (let i = 0; i < fileData.rawData.Struktur.length; i++) {
@@ -187,7 +196,6 @@ function parseFile() {
 
 		dataObject.listData.push([id, dataObject.partData[id][name], ...dataObject.partData[id].children]);
 	}
-
 	KadUtils.KadDOM.enableBtn(idBtn_download, true);
 }
 
