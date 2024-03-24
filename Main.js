@@ -26,7 +26,7 @@ function mainSetup() {
 	populateTokenList(idUL_SOU, ulInfoSOU);
 }
 
-const ulInfoUpload = ["MM-Nummer der Hauptanlage im linken Feld eintragen", "Der Anlagenname im rechten Feld ist optional.", 'Der Button "SOU-Liste als *.xlsx" ist blockiert wenn keine MM-Nummer der Anlage eingegeben wurde'];
+const ulInfoUpload = ['Tabellenblätter müssen mit "Struktur" und "Menge" beschriftet sein!', "MM-Nummer der Hauptanlage im linken Feld eintragen", "Der Anlagenname im rechten Feld ist optional.", 'Der Button "SOU-Liste als *.xlsx" ist blockiert wenn keine MM-Nummer der Anlage eingegeben wurde'];
 const ulInfoSOU = ['Mengenstückliste und Strukturstückliste mit "Zwischenablage (Daten)" auf 2 Tabellenblätter in einer Datei speichern.'];
 
 function openInfoUpload() {
@@ -99,7 +99,7 @@ function getFile(file) {
 			}
 		});
 		if (error < 0) {
-			alert('Tabellenblätter müssen mit "Struktur" und "Menge" beschriftet sein!');
+			alert(ulInfoUpload[0]);
 			return;
 		}
 		fileIsParsed();
