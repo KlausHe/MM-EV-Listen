@@ -162,6 +162,7 @@ function parseFile() {
 
 	for (let obj of fileData.rawData.Menge) {
 		let id = Number(obj[mmID]); // get MM-Nummer
+
 		dataObject.partData[id] = {};
 		for (let field of partDataFields) {
 			dataObject.partData[id][field] = obj[field];
@@ -177,14 +178,14 @@ function parseFile() {
 	for (let i = 0; i < fileData.rawData.Struktur.length; i++) {
 		const currObj = fileData.rawData.Struktur[i];
 		const id = Number(currObj[mmID]);
-		dataObject.partData[id].level = Number(currObj.Ebene);
+		const level = Number(currObj.Ebene);
+		dataObject.partData[id].level = level;
 
 		// find all parents
 		if (dataObject.evArray.includes(Number(currObj[mmID]))) {
-			findParentAndAddAsChild(i, id);
+			findParentAndAddAsChild(i, id, level);
 		}
 	}
-
 	dataObject.listData = [];
 
 	for (let i = 0; i < fileData.rawData.Struktur.length; i++) {
@@ -199,17 +200,16 @@ function parseFile() {
 	KadUtils.KadDOM.enableBtn(idBtn_download, true);
 }
 
-function findParentAndAddAsChild(i, childID) {
-	let tempLevel = dataObject.partData[childID].level;
+function findParentAndAddAsChild(i, childID, startLevel) {
+	let tempLevel = startLevel;
 	let tempID = childID;
-
 	for (let p = i - 1; p >= 0; p--) {
 		const higherID = Number(fileData.rawData.Struktur[p][mmID]);
-		const higherObj = dataObject.partData[higherID];
 		const higherLevel = Number(fileData.rawData.Struktur[p].Ebene);
-
 		if (tempLevel <= higherLevel) continue;
-		if (higherObj.children.includes(tempID)) return;
+
+		const higherObj = dataObject.partData[higherID];
+		if (higherObj.children.includes(tempID)) continue;
 
 		higherObj.children.push(tempID);
 		tempID = higherID;
@@ -220,7 +220,6 @@ function findParentAndAddAsChild(i, childID) {
 // -----------------------------
 function startDownload() {
 	const book = utils.book_new();
-
 	dataObject.listData.unshift(["Zeichnung", name, "EV-Nummern"]);
 	const listData = utils.aoa_to_sheet(dataObject.listData);
 
