@@ -209,9 +209,10 @@ function findParentAndAddAsChild(i, childID, startLevel) {
 		if (tempLevel <= higherLevel) continue;
 
 		const higherObj = dataObject.partData[higherID];
-		if (higherObj.children.includes(tempID)) continue;
+		if (higherObj.children.includes(tempID)) {
+      higherObj.children.push(tempID);
+    }
 
-		higherObj.children.push(tempID);
 		tempID = higherID;
 		tempLevel--;
 	}
