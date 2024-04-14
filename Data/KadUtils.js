@@ -17,34 +17,29 @@ export function dbCLStyle(id, loc = 0) {
 export function daEL(id, type, fn) {
 	dbID(id).addEventListener(type, fn);
 }
+export function objectLength(obj) {
+	return Object.keys(obj).length;
+}
 export function hostDebug() {
 	return ["local", "127.0.0.1"].some((s) => window.location.hostname.includes(s));
 }
-export function objectLength(obj) {
-	return Object.keys(obj).length;
+export function error(...errorText) {
+	throw new Error(errorText.join("; "));
 }
 
 export function deepClone(data) {
 	if (data === null || data === undefined) return data;
 	return JSON.parse(JSON.stringify(data));
 }
-export function copyToClipboard(text) {
+export function copyToClipboard(text, enabled = true) {
+	if (!enabled) return;
+	if (!navigator.clipboard) return;
 	let val = text;
 	if (!isNaN(val) && Number.isFinite(Number(val))) {
 		val = val.toString().replace(/,/g, ""); //remove thousandscomma
 		val = val.replace(".", ",");
 	}
-	if (!navigator.clipboard) {
-		// use old commandExec() way
-		let temp = document.createElement("input");
-		document.body.appendChild(temp);
-		temp.setAttribute("value", val);
-		temp.select();
-		document.execCommand("copy");
-		document.body.removeChild(temp);
-	} else {
-		navigator.clipboard.writeText(val);
-	}
+  navigator.clipboard.writeText(val);
 }
 export const KadCSS = {
 	getRoot(object, numberOnly = false, RemToPX = false) {
@@ -918,4 +913,85 @@ export const KadColor = {
 		k = Math.round(k * 100);
 		return [c, m, y, k];
 	},
+	RGBtoLuminance(RGB) {
+		let r = RGB[0] / 255;
+		let g = RGB[1] / 255;
+		let b = RGB[2] / 255;
+		return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+	},
 };
+export class KadDebug {
+	#lbl;
+	#text;
+	#startTime;
+	#lapTime;
+	#showLabel;
+	constructor({ label = "", showLabel = false } = {}) {
+		this.#lbl = label;
+		this.#showLabel = showLabel;
+		this.#startTime = this.#time();
+		this.#lapTime = [this.#startTime];
+		if (label) {
+			this.#newText();
+			this.#print();
+		}
+	}
+	#time() {
+		return new Date();
+	}
+	#print() {
+		console.log(this.#text);
+	}
+	#label() {
+		return this.#lbl && this.#showLabel ? `${this.#lbl} ` : "";
+	}
+	#newText(prompt) {
+		this.#text = "";
+		this.#addText(this.#label());
+		this.#addText(prompt);
+	}
+	#addText(t) {
+		if (t == undefined) return;
+		this.#text += `${t} `;
+	}
+	#elapsedtTime() {
+		return `${this.#time() - this.#startTime}ms`;
+	}
+	#intervalTime(num) {
+		return `${((this.#time() - this.#startTime) / num).toFixed(3)} / ${num}`;
+	}
+	#addLap() {
+		this.#lapTime.push(this.#time());
+	}
+
+	lap(prompt) {
+		this.#addLap();
+		this.#newText(prompt || "Lap:");
+		this.#addText(this.#lapTime.at(-1) - this.#lapTime.at(-2));
+		this.#addText("ms");
+		this.#print();
+	}
+
+	now(prompt) {
+		this.#newText(prompt);
+		this.#addText(this.#elapsedtTime());
+		this.#print();
+	}
+	reset() {
+		this.#startTime = this.#time();
+		this.#lapTime = [this.#startTime];
+	}
+
+	average(num, prompt = null) {
+		this.#newText(prompt);
+		this.#addText(this.#intervalTime(num));
+		this.#addText(`(${this.#elapsedtTime()})`);
+		this.#print();
+	}
+	startProfile() {
+		console.profile();
+	}
+	stopProfile() {
+		console.profileEnd();
+	}
+}
