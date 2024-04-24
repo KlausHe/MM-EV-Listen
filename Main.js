@@ -176,25 +176,25 @@ function parseFile() {
 	KadUtils.dbID(idLbl_loadedSOU).textContent = `${dataObject.evArray.length} E/V-Teile gefunden`;
 
 	for (let i = 0; i < fileData.rawData.Struktur.length; i++) {
-		const currObj = fileData.rawData.Struktur[i];
+    const currObj = fileData.rawData.Struktur[i];
 		const id = Number(currObj[mmID]);
 		const level = Number(currObj.Ebene);
 		dataObject.partData[id].level = level;
 
 		// find all parents
 		if (dataObject.evArray.includes(Number(currObj[mmID]))) {
-			findParentAndAddAsChild(i, id, level);
+      findParentAndAddAsChild(i, id, level);
 		}
 	}
 	dataObject.listData = [];
-
+  
 	for (let i = 0; i < fileData.rawData.Struktur.length; i++) {
-		const currObj = fileData.rawData.Struktur[i];
+    const currObj = fileData.rawData.Struktur[i];
 		const id = Number(currObj[mmID]);
-
+    
 		if (dataObject.partData[id].children.length == 0) continue;
 		if (dataObject.listData.some((arr) => arr[0] == id)) continue;
-
+    
 		dataObject.listData.push([id, dataObject.partData[id][name], ...dataObject.partData[id].children]);
 	}
 	KadUtils.KadDOM.enableBtn(idBtn_download, true);
@@ -209,7 +209,7 @@ function findParentAndAddAsChild(i, childID, startLevel) {
 		if (tempLevel <= higherLevel) continue;
 
 		const higherObj = dataObject.partData[higherID];
-		if (higherObj.children.includes(tempID)) {
+		if (!higherObj.children.includes(tempID)) {
       higherObj.children.push(tempID);
     }
 
