@@ -62,11 +62,6 @@
 	--UIWidth20: calc(var(--UIHeight1) * 20);
 	--UIWidth30: calc(var(--UIHeight1) * 30);
 
-	--rangeHeight: 0.833rem;
-	--rangeThumbWidth: 0.5rem;
-	--rangeThumbHeight: 1.25rem;
-	--gridWidthGameCanvas: 36rem;
-	--gridHeightGameCanvas: 36rem;
 	/**/
 	--borderThin: 0.042rem solid hsl(var(--bgcNavbar));
 	--borderThinInverse: 0.042rem solid hsl(var(--txtNavbar));
@@ -74,18 +69,14 @@
 	--UIBorderBottom: 0.3rem solid hsl(var(--bgcNavbar));
 	/* IMAGES */
 	--imgSize: 1.25rem;
-	--colBoxWidth: calc(var(--UIHeight1) * 0.75);
-	--colBoxHeight: calc(var(--UIHeight1) * 0.75);
-	--imgGifPrevWidth: 7rem;
-	--imgGifMainWidth: 24rem;
 	/* SONSTIGES */
 	--transitionTimeInfo: 0.3s;
 	--transitionTimeHide: 1s;
 	--transitionTimeName: 1.3s;
 	--fontSize: 16px;
-	--fontWeight: 300;
 	--fontSizeMedium: 1.2rem;
 	--fontSizeLarge: 1.4rem;
+	--fontWeight: 300;
 }
 
 * {
@@ -128,8 +119,7 @@ dialog {
 
 input,
 button,
-textarea,
-select {
+textarea {
 	-moz-appearance: none;
 	-webkit-appearance: none;
 	appearance: none;
@@ -145,8 +135,7 @@ select {
 
 input:hover,
 button:hover,
-textarea:hover,
-select:hover {
+textarea:hover {
 	background-color: hsl(var(--bgcNavbar) / 0.6);
 	color: hsl(var(--txtNavbar));
 	transition-duration: 0.1s;
@@ -157,9 +146,6 @@ ol,
 ul {
 	list-style-position: inside;
 }
-li {
-	margin: var(--gridGap);
-}
 
 div {
 	padding: 0;
@@ -169,15 +155,6 @@ div {
 label {
 	background-color: hsl(var(--bgcButton));
 	vertical-align: middle;
-}
-
-label[for] {
-	cursor: pointer;
-}
-
-label[for]:hover {
-	background-color: hsl(var(--bgcNavbar) / 0.6);
-	color: hsl(var(--txtNavbar));
 }
 
 fieldset {
@@ -216,31 +193,6 @@ img {
 	transition: all var(--transitionTimeName) ease-in-out;
 }
 
-textarea {
-	width: var(--UIWidth8);
-	height: var(--UIHeight3);
-	padding: var(--padding);
-	resize: vertical;
-}
-
-select {
-	/* padding-left: var(--padding);  instead of Padding use indent for safari*/
-	position: relative;
-	text-indent: var(--gridGap);
-	border-right: var(--UIBorderRight);
-	border-bottom: var(--UIBorderBottom);
-	max-width: var(--UIWidth16);
-	-o-text-overflow: ellipsis;
-	text-overflow: ellipsis;
-	padding-right: calc(2 * var(--padding));
-}
-
-select:disabled {
-	background-color: hsl(var(--bgcBackground) / 0.1);
-	color: var(--txtBackground);
-	cursor: default;
-}
-
 button {
 	position: relative;
 	width: var(--UIWidth8);
@@ -277,9 +229,7 @@ input:disabled {
 	cursor: default;
 }
 
-input[type="text"],
-input[type="email"],
-input[type="password"] {
+input[type="text"] {
 	padding: var(--padding);
 }
 
@@ -509,55 +459,4 @@ input[type="image"] {
 
 [uiAlign~="right"] {
 	text-align: right;
-}
-
-[uiFlex~="horizontal"] {
-	display: -webkit-box;
-	display: flex;
-	-webkit-box-orient: horizontal;
-	-webkit-box-direction: normal;
-	flex-direction: row;
-	-webkit-box-pack: start;
-	justify-content: left;
-	-webkit-box-align: center;
-	align-items: center;
-	flex-wrap: nowrap;
-	gap: var(--gridGap);
-	padding-bottom: var(--gridGap);
-}
-
-[uiFlex~="vertical"] {
-	display: -webkit-box;
-	display: flex;
-	-webkit-box-orient: vertical;
-	-webkit-box-direction: normal;
-	flex-direction: column;
-	flex-wrap: nowrap;
-	gap: var(--gridGap);
-	padding-right: var(--gridGap);
-}
-
-[uiFilter~="invBackground"] {
-	filter: invert(var(--invBackground));
-	transition: all var(--transitionTimeInfo) linear var(--transitionTimeInfo);
-}
-
-[uiFilter~="invBackground"]:active {
-	filter: var(--invBackground);
-	transition-duration: 0s;
-	transition-delay: 0s;
-}
-
-[uiFilter~="invTrue"] {
-	-webkit-filter: invert(1);
-	filter: invert(1);
-}
-
-[uiFilter~="invFalse"] {
-	-webkit-filter: invert(0);
-	filter: invert(0);
-}
-
-[uiWrap~="nowrap"] {
-	white-space: nowrap;
 }
