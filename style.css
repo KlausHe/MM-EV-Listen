@@ -1,267 +1,270 @@
 :root {
-	/* Navbar */
-	--bgcNavbar: 223 11% 18%;
-	--txtNavbar: 0 100% 100%;
-	--invNavbar: 1;
-	/* Title */
-	--bgcGridtitle: 180 80% 80%;
-	--txtGridtitle: 0 100% 100%;
-	--invGridtitle: 1;
-	/* General Background */
-	--bgcBackground: 180 0% 80%;
-	--txtBackground: 0 100% 0%;
-	--invBackground: 0;
-	/* Tile / Subgrid */
-	--bgcSubgrid: 0 100% 100%;
-	--opacitySubgrid: 0.3;
-	/* Button Colors */
-	--bgcButton: 0 0% 100%;
-	--txtButton: 0 0% 0%;
-	--bgcButtonPositive: 120 100% 50%;
-	--txtButtonPositive: 0 0% 0%;
-	--bgcButtonNegative: 0 100% 44%;
-	--txtButtonNegative: 0 0% 100%;
-	/* GRID SIZES */
-	--gridGap: 0.25rem;
-	--gridMarginSideFactor: 0.5;
-	--gridMarginSide: calc(var(--UIHeight1) * var(--gridMarginSideFactor));
-	--divGridMinWidthFactor: 28;
-	--divGridMinWidth: calc(var(--UIHeight1) * var(--divGridMinWidthFactor));
-	--divGridMinHeight: calc(var(--UIHeight1) * 10);
-	--navOrientation: column;
-	/* UI SIZES */
-	--UIRadius: 0.3rem;
-	--LayoutRadius: 0rem;
-	--padding: 0.417rem;
-	--paddingVertical: 0.167rem;
-	--UIPadding: 0.167rem;
+  /* Navbar */
+  --bgcNavbar: 223 11% 18%;
+  --txtNavbar: 0 100% 100%;
+  --invNavbar: 1;
+  /* Title */
+  --bgcGridtitle: 180 80% 80%;
+  --txtGridtitle: 0 100% 100%;
+  --invGridtitle: 1;
+  /* General Background */
+  --bgcBackground: 180 0% 80%;
+  --txtBackground: 0 100% 0%;
+  --invBackground: 0;
+  /* Tile / Subgrid */
+  --bgcSubgrid: 0 100% 100%;
+  --opacitySubgrid: 0.3;
+  /* Button Colors */
+  --bgcButton: 0 0% 100%;
+  --txtButton: 0 0% 0%;
+  --bgcButtonPositive: 120 100% 50%;
+  --txtButtonPositive: 0 0% 0%;
+  --bgcButtonNegative: 0 100% 44%;
+  --txtButtonNegative: 0 0% 100%;
+  /* GRID SIZES */
+  --gridGap: 0.25rem;
+  --gridMarginSideFactor: 0.5;
+  --gridMarginSide: calc(var(--UIHeight1) * var(--gridMarginSideFactor));
+  --divGridMinWidthFactor: 28;
+  --divGridMinWidth: calc(var(--UIHeight1) * var(--divGridMinWidthFactor));
+  --divGridMinHeight: calc(var(--UIHeight1) * 10);
+  --navOrientation: column;
+  /* UI SIZES */
+  --UIRadius: 0.3rem;
+  --LayoutRadius: 0rem;
+  --padding: 0.417rem;
+  --paddingVertical: 0.167rem;
+  --UIPadding: 0.167rem;
 
-	--UIHeight1: 1.5rem;
-	--UIHeight2: calc(var(--UIHeight1) * 2);
-	--UIHeight3: calc(var(--UIHeight1) * 3);
+  --UIHeight1: 1.5rem;
+  --UIHeight2: calc(var(--UIHeight1) * 2);
+  --UIHeight3: calc(var(--UIHeight1) * 3);
 
-	--UIWidth1: calc(var(--UIHeight1) * 1);
-	--UIWidth2: calc(var(--UIHeight1) * 2);
-	--UIWidth3: calc(var(--UIHeight1) * 3);
-	--UIWidth4: calc(var(--UIHeight1) * 4);
-	--UIWidth5: calc(var(--UIHeight1) * 5);
-	--UIWidth6: calc(var(--UIHeight1) * 6);
-	--UIWidth7: calc(var(--UIHeight1) * 7);
-	--UIWidth8: calc(var(--UIHeight1) * 8);
-	--UIWidth9: calc(var(--UIHeight1) * 9);
-	--UIWidth10: calc(var(--UIHeight1) * 10);
-	--UIWidth11: calc(var(--UIHeight1) * 11);
-	--UIWidth12: calc(var(--UIHeight1) * 12);
-	--UIWidth13: calc(var(--UIHeight1) * 13);
-	--UIWidth14: calc(var(--UIHeight1) * 14);
-	--UIWidth15: calc(var(--UIHeight1) * 15);
-	--UIWidth16: calc(var(--UIHeight1) * 16);
-	--UIWidth17: calc(var(--UIHeight1) * 17);
-	--UIWidth18: calc(var(--UIHeight1) * 18);
-	--UIWidth19: calc(var(--UIHeight1) * 19);
-	--UIWidth20: calc(var(--UIHeight1) * 20);
-	--UIWidth30: calc(var(--UIHeight1) * 30);
+  --UIWidth1: calc(var(--UIHeight1) * 1);
+  --UIWidth2: calc(var(--UIHeight1) * 2);
+  --UIWidth3: calc(var(--UIHeight1) * 3);
+  --UIWidth4: calc(var(--UIHeight1) * 4);
+  --UIWidth5: calc(var(--UIHeight1) * 5);
+  --UIWidth6: calc(var(--UIHeight1) * 6);
+  --UIWidth7: calc(var(--UIHeight1) * 7);
+  --UIWidth8: calc(var(--UIHeight1) * 8);
+  --UIWidth9: calc(var(--UIHeight1) * 9);
+  --UIWidth10: calc(var(--UIHeight1) * 10);
+  --UIWidth11: calc(var(--UIHeight1) * 11);
+  --UIWidth12: calc(var(--UIHeight1) * 12);
+  --UIWidth13: calc(var(--UIHeight1) * 13);
+  --UIWidth14: calc(var(--UIHeight1) * 14);
+  --UIWidth15: calc(var(--UIHeight1) * 15);
+  --UIWidth16: calc(var(--UIHeight1) * 16);
+  --UIWidth17: calc(var(--UIHeight1) * 17);
+  --UIWidth18: calc(var(--UIHeight1) * 18);
+  --UIWidth19: calc(var(--UIHeight1) * 19);
+  --UIWidth20: calc(var(--UIHeight1) * 20);
+  --UIWidth30: calc(var(--UIHeight1) * 30);
 
-	/**/
-	--borderThin: 0.042rem solid hsl(var(--bgcNavbar));
-	--borderThinInverse: 0.042rem solid hsl(var(--txtNavbar));
-	--UIBorderRight: 0.5rem solid hsl(var(--bgcNavbar));
-	--UIBorderBottom: 0.3rem solid hsl(var(--bgcNavbar));
-	/* IMAGES */
-	--imgSize: 1.25rem;
-	/* SONSTIGES */
-	--transitionTimeInfo: 0.3s;
-	--transitionTimeHide: 1s;
-	--transitionTimeName: 1.3s;
-	--fontSize: 16px;
-	--fontSizeMedium: 1.2rem;
-	--fontSizeLarge: 1.4rem;
-	--fontWeight: 300;
+  /**/
+  --borderThin: 0.042rem solid hsl(var(--bgcNavbar));
+  --borderThinInverse: 0.042rem solid hsl(var(--txtNavbar));
+  --UIBorderRight: 0.5rem solid hsl(var(--bgcNavbar));
+  --UIBorderBottom: 0.3rem solid hsl(var(--bgcNavbar));
+  /* IMAGES */
+  --imgSize: 1.25rem;
+  /* SONSTIGES */
+  --transitionTimeInfo: 0.3s;
+  --transitionTimeHide: 1s;
+  --transitionTimeName: 1.3s;
+  --fontSize: 16px;
+  --fontSizeMedium: 1.2rem;
+  --fontSizeLarge: 1.4rem;
+  --fontWeight: 300;
 }
 
 * {
-	margin: 0;
-	padding: 0;
-	-webkit-box-sizing: border-box;
-	box-sizing: border-box;
-	font-family: Arial, sans-serif;
-	font-size: var(--fontSize);
-	font-weight: var(--fontWeight);
-	font-style: normal;
+  margin: 0;
+  padding: 0;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+  font-size: var(--fontSize);
+  font-weight: var(--fontWeight);
+  font-style: normal;
 }
 
 *::after,
 *::before {
-	-webkit-box-sizing: border-box;
-	box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
 }
 
 body {
-	background-color: hsl(var(--bgcBackground));
-	color: hsl(var(--txtBackground));
-	-webkit-transition: all var(--transitionTimeName) ease-in-out;
-	transition: all var(--transitionTimeName) ease-in-out;
+  background-color: hsl(var(--bgcBackground));
+  color: hsl(var(--txtBackground));
+  -webkit-transition: all var(--transitionTimeName) ease-in-out;
+  transition: all var(--transitionTimeName) ease-in-out;
 }
 
 main {
-	display: grid;
-	grid-gap: var(--padding);
-	margin: var(--gridMarginSide);
-	justify-content: center;
+  display: grid;
+  grid-gap: var(--padding);
+  margin: var(--gridMarginSide);
+  justify-content: center;
 }
 /*------------------------------*/
 dialog {
-	margin: auto;
-	padding: var(--padding);
-	border: none;
-	border-radius: var(--UIRadius);
+  margin: auto;
+  padding: var(--padding);
+  border: none;
+  border-radius: var(--UIRadius);
 }
 
 input,
 button,
 textarea {
-	-moz-appearance: none;
-	-webkit-appearance: none;
-	appearance: none;
-	height: var(--UIHeight1);
-	text-decoration: none;
-	background-color: hsl(var(--bgcButton));
-	color: hsl(var(--txtButton));
-	border: var(--borderThin);
-	border-radius: var(--UIRadius);
-	padding: 0;
-	vertical-align: middle;
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  appearance: none;
+  height: var(--UIHeight1);
+  text-decoration: none;
+  background-color: hsl(var(--bgcButton));
+  color: hsl(var(--txtButton));
+  border: var(--borderThin);
+  border-radius: var(--UIRadius);
+  padding: 0;
+  vertical-align: middle;
 }
 
 input:hover,
 button:hover,
 textarea:hover {
-	background-color: hsl(var(--bgcNavbar) / 0.6);
-	color: hsl(var(--txtNavbar));
-	transition-duration: 0.1s;
-	transition-delay: 0s;
+  background-color: hsl(var(--bgcNavbar) / 0.6);
+  color: hsl(var(--txtNavbar));
+  transition-duration: 0.1s;
+  transition-delay: 0s;
 }
 
 ol,
 ul {
-	list-style-position: inside;
+  list-style-position: inside;
 }
 
 div {
-	padding: 0;
-	margin: 0;
+  padding: 0;
+  margin: 0;
 }
 
 label {
-	background-color: hsl(var(--bgcButton));
-	vertical-align: middle;
+  background-color: hsl(var(--bgcButton));
+  vertical-align: middle;
+}
+label:disabled {
+  color: red;
 }
 
 fieldset {
-	width: var(--UIWidth20);
-	padding: var(--padding);
-	border: var(--borderThin);
-	border-radius: var(--UIRadius);
-	margin-bottom: var(--UIHeight1);
-	display: grid;
-	grid-gap: var(--padding);
+  width: var(--UIWidth20);
+  padding: var(--padding);
+  border: var(--borderThin);
+  border-radius: var(--UIRadius);
+  margin-bottom: var(--UIHeight1);
+  display: grid;
+  grid-gap: var(--padding);
 }
 h1 {
-	font-size: var(--fontSizeLarge);
-	font-weight: var(--fontWeight);
-	margin-bottom: var(--UIHeight1);
+  font-size: var(--fontSizeLarge);
+  font-weight: var(--fontWeight);
+  margin-bottom: var(--UIHeight1);
 }
 
 /*           I-whatever*/
 i {
-	vertical-align: middle;
-	align-items: center;
-	-webkit-box-align: center;
-	margin: 0 var(--padding);
+  vertical-align: middle;
+  align-items: center;
+  -webkit-box-align: center;
+  margin: 0 var(--padding);
 }
 
 img {
-	width: var(--imgSize);
-	background-color: transparent;
-	border-color: transparent;
-	margin: 0;
-	padding: 0;
-	-webkit-box-align: center;
-	align-items: center;
-	vertical-align: middle;
-	-webkit-transition: all var(--transitionTimeName) ease-in-out;
-	transition: all var(--transitionTimeName) ease-in-out;
+  width: var(--imgSize);
+  background-color: transparent;
+  border-color: transparent;
+  margin: 0;
+  padding: 0;
+  -webkit-box-align: center;
+  align-items: center;
+  vertical-align: middle;
+  -webkit-transition: all var(--transitionTimeName) ease-in-out;
+  transition: all var(--transitionTimeName) ease-in-out;
 }
 
 button {
-	position: relative;
-	width: var(--UIWidth8);
-	text-align: center;
-	-webkit-box-align: center;
-	align-items: center;
-	cursor: pointer;
-	transition: all var(--transitionTimeInfo) ease-in-out;
+  position: relative;
+  width: var(--UIWidth8);
+  text-align: center;
+  -webkit-box-align: center;
+  align-items: center;
+  cursor: pointer;
+  transition: all var(--transitionTimeInfo) ease-in-out;
 }
 
 button:disabled {
-	background-color: hsl(var(--bgcBackground) / 0.05);
-	color: hsl(var(--txtBackground));
-	cursor: default;
+  background-color: hsl(var(--bgcBackground) / 0.05);
+  color: hsl(var(--txtBackground));
+  cursor: default;
 }
 
 button:active {
-	background-color: hsl(var(--bgcNavbar));
-	color: hsl(var(--txtNavbar));
-	transition-duration: 0s;
-	transition-delay: 0s;
+  background-color: hsl(var(--bgcNavbar));
+  color: hsl(var(--txtNavbar));
+  transition-duration: 0s;
+  transition-delay: 0s;
 }
 
 input {
-	width: var(--UIWidth8);
-	-webkit-box-align: center;
-	align-items: center;
-	text-align: left;
+  width: var(--UIWidth8);
+  -webkit-box-align: center;
+  align-items: center;
+  text-align: left;
 }
 
 input:disabled {
-	background-color: hsl(var(--bgcBackground) / 0.1);
-	color: hsl(var(--txtBackground));
-	cursor: default;
+  background-color: hsl(var(--bgcBackground) / 0.1);
+  color: hsl(var(--txtBackground));
+  cursor: default;
 }
 
 input[type="text"] {
-	padding: var(--padding);
+  padding: var(--padding);
 }
 
 input[type="number"] {
-	appearance: none;
-	-moz-appearance: textfield;
-	padding: var(--padding);
+  appearance: none;
+  -moz-appearance: textfield;
+  padding: var(--padding);
 }
 
 /* Webkit browsers like Safari and Chrome */
 input[type="number"]::-webkit-inner-spin-button,
 input[type="number"]::-webkit-outer-spin-button {
-	-webkit-appearance: none;
+  -webkit-appearance: none;
 }
 
 input[type="checkbox"] {
-	/* mox: none; because "Checkbox" does not work */
-	-moz-appearance: none;
-	-webkit-appearance: checkbox;
-	appearance: checkbox;
-	width: var(--imgSize);
-	height: var(--imgSize);
-	cursor: pointer;
+  /* mox: none; because "Checkbox" does not work */
+  -moz-appearance: none;
+  -webkit-appearance: checkbox;
+  appearance: checkbox;
+  width: var(--imgSize);
+  height: var(--imgSize);
+  cursor: pointer;
 }
 
 input[type="image"] {
-	height: var(--imgSize);
-	width: var(--imgSize);
-	background-color: transparent;
-	border-color: transparent;
-	padding: 0;
-	margin: 0 var(--padding);
+  height: var(--imgSize);
+  width: var(--imgSize);
+  background-color: transparent;
+  border-color: transparent;
+  padding: 0;
+  margin: 0 var(--padding);
 }
 
 .cl_infoCB,
@@ -269,194 +272,194 @@ input[type="image"] {
 .cl_info,
 .cl_infoBTN,
 .cl_infoArea {
-	display: inline-block;
-	position: relative;
-	height: var(--UIHeight1);
-	background-color: hsl(var(--bgcBackground) / 0.15);
-	color: hsl(var(--txtBackground));
-	width: var(--UIWidth8);
-	line-height: 150%;
-	border: var(--borderThin);
-	border-radius: var(--UIRadius);
-	text-align: center;
+  display: inline-block;
+  position: relative;
+  height: var(--UIHeight1);
+  background-color: hsl(var(--bgcBackground) / 0.15);
+  color: hsl(var(--txtBackground));
+  width: var(--UIWidth8);
+  line-height: 150%;
+  border: var(--borderThin);
+  border-radius: var(--UIRadius);
+  text-align: center;
 }
 
 .cl_infoCB {
-	width: var(--UIWidth1);
+  width: var(--UIWidth1);
 }
 
 .cl_infoBTN {
-	background-color: hsl(var(--bgcButton));
+  background-color: hsl(var(--bgcButton));
 }
 .cl_infoArea {
-	min-height: var(--UIHeight3);
-	height: auto;
+  min-height: var(--UIHeight3);
+  height: auto;
 }
 
 .cl_outputLbl {
-	background-color: hsl(var(--bgcNavbar));
-	color: hsl(var(--txtNavbar));
-	border-radius: var(--LayoutRadius);
-	font-size: var(--fontSizeLarge);
-	border: var(--borderThinInverse);
-	min-height: var(--UIHeight2);
-	min-width: var(--UIWidth12);
-	display: -webkit-box;
-	display: flex;
-	-webkit-box-align: center;
-	align-items: center;
-	-webkit-box-pack: center;
-	justify-content: center;
-	text-align: center;
+  background-color: hsl(var(--bgcNavbar));
+  color: hsl(var(--txtNavbar));
+  border-radius: var(--LayoutRadius);
+  font-size: var(--fontSizeLarge);
+  border: var(--borderThinInverse);
+  min-height: var(--UIHeight2);
+  min-width: var(--UIWidth12);
+  display: -webkit-box;
+  display: flex;
+  -webkit-box-align: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  justify-content: center;
+  text-align: center;
 }
 
 .cl_highlighted {
-	background-color: hsl(var(--bgcButtonPositive));
-	color: hsl(var(--txtButtonPositive));
+  background-color: hsl(var(--bgcButtonPositive));
+  color: hsl(var(--txtButtonPositive));
 }
 
 .cl_outputText {
-	padding: var(--padding);
-	border-top: var(--borderThin);
+  padding: var(--padding);
+  border-top: var(--borderThin);
 }
 
 [data-btnstatus="btnPositive"] {
-	background-color: hsl(var(--bgcButtonPositive));
-	color: hsl(var(--txtButtonPositive));
+  background-color: hsl(var(--bgcButtonPositive));
+  color: hsl(var(--txtButtonPositive));
 }
 
 [data-btnstatus="btnNegative"] {
-	background-color: hsl(var(--bgcButtonNegative));
-	color: hsl(var(--txtButtonNegative));
+  background-color: hsl(var(--bgcButtonNegative));
+  color: hsl(var(--txtButtonNegative));
 }
 
 [data-btnstatus="btnBasecolor"] {
-	background-color: hsl(var(--bgcNavbar));
-	color: hsl(var(--txtNavbar));
+  background-color: hsl(var(--bgcNavbar));
+  color: hsl(var(--txtNavbar));
 }
 
 [uiType~="transparent"] {
-	background-color: transparent;
-	border-color: transparent;
+  background-color: transparent;
+  border-color: transparent;
 }
 
 [uiSize~="img"] {
-	width: var(--imgSize);
+  width: var(--imgSize);
 }
 
 [uiSize~="size1"] {
-	width: var(--UIWidth1);
+  width: var(--UIWidth1);
 }
 [uiSize~="size2"] {
-	width: var(--UIWidth2);
+  width: var(--UIWidth2);
 }
 [uiSize~="size3"] {
-	width: var(--UIWidth3);
+  width: var(--UIWidth3);
 }
 [uiSize~="size4"] {
-	width: var(--UIWidth4);
+  width: var(--UIWidth4);
 }
 [uiSize~="size5"] {
-	width: var(--UIWidth5);
+  width: var(--UIWidth5);
 }
 [uiSize~="size6"] {
-	width: var(--UIWidth6);
+  width: var(--UIWidth6);
 }
 [uiSize~="size7"] {
-	width: var(--UIWidth7);
+  width: var(--UIWidth7);
 }
 [uiSize~="size8"] {
-	width: var(--UIWidth8);
+  width: var(--UIWidth8);
 }
 [uiSize~="size9"] {
-	width: var(--UIWidth9);
+  width: var(--UIWidth9);
 }
 [uiSize~="size10"] {
-	width: var(--UIWidth10);
+  width: var(--UIWidth10);
 }
 [uiSize~="size11"] {
-	width: var(--UIWidth11);
+  width: var(--UIWidth11);
 }
 [uiSize~="size12"] {
-	width: var(--UIWidth12);
+  width: var(--UIWidth12);
 }
 [uiSize~="size13"] {
-	width: var(--UIWidth13);
+  width: var(--UIWidth13);
 }
 [uiSize~="size14"] {
-	width: var(--UIWidth14);
+  width: var(--UIWidth14);
 }
 [uiSize~="size15"] {
-	width: var(--UIWidth15);
+  width: var(--UIWidth15);
 }
 [uiSize~="size16"] {
-	width: var(--UIWidth16);
+  width: var(--UIWidth16);
 }
 [uiSize~="size17"] {
-	width: var(--UIWidth17);
+  width: var(--UIWidth17);
 }
 [uiSize~="size18"] {
-	width: var(--UIWidth18);
+  width: var(--UIWidth18);
 }
 [uiSize~="size19"] {
-	width: var(--UIWidth19);
+  width: var(--UIWidth19);
 }
 [uiSize~="size20"] {
-	width: var(--UIWidth20);
+  width: var(--UIWidth20);
 }
 
 [uiSize~="height2"] {
-	height: var(--UIHeight2);
+  height: var(--UIHeight2);
 }
 
 [uiSize~="height3"] {
-	height: var(--UIHeight3);
+  height: var(--UIHeight3);
 }
 
 [uiSize~="outputTable"] {
-	max-width: var(--UIWidth20);
+  max-width: var(--UIWidth20);
 }
 
 [uiSize~="outputTitle"] {
-	width: var(--UIWidth13);
+  width: var(--UIWidth13);
 }
 
 [uiSize~="outputText"] {
-	width: var(--UIWidth20);
+  width: var(--UIWidth20);
 }
 
 [uiRadius~="none"] {
-	border-radius: 0;
+  border-radius: 0;
 }
 
 [uiRadius~="top"] {
-	border-bottom-right-radius: 0;
-	border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
 }
 
 [uiRadius~="right"] {
-	border-top-left-radius: 0;
-	border-bottom-left-radius: 0;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
 }
 
 [uiRadius~="bottom"] {
-	border-top-right-radius: 0;
-	border-top-left-radius: 0;
+  border-top-right-radius: 0;
+  border-top-left-radius: 0;
 }
 
 [uiRadius~="left"] {
-	border-top-right-radius: 0;
-	border-bottom-right-radius: 0;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
 }
 
 [uiAlign~="left"] {
-	text-align: left;
+  text-align: left;
 }
 
 [uiAlign~="center"] {
-	text-align: center;
+  text-align: center;
 }
 
 [uiAlign~="right"] {
-	text-align: right;
+  text-align: right;
 }
