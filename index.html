@@ -19,6 +19,14 @@
       <button type="button" id="idBtn_infoCloseUpload" autofocus>Schließen</button>
     </fieldset>
   </dialog>
+  <dialog id="idDia_Error">
+    <fieldset>
+      <legend>Fehler in Excellisten</legend>
+      <ul id="idUL_Error">
+      </ul>
+      <button type="button" id="idBtn_infoCloseError" autofocus>Schließen</button>
+    </fieldset>
+  </dialog>
   <dialog id="idDia_SOU">
     <fieldset>
       <legend>SOU-Stücklistendatei erstellen</legend>
@@ -39,6 +47,10 @@
       <div><label class="cl_infoBTN" uiRadius="left" uiSize="size7" id="idLbl_inputSOU" for="idVin_inputSOU">SOU-Liste als ".xlsx"<input type="file" id="idVin_inputSOU" accept=".xlsx" hidden></input>
         </label><button type="button" id="idBtn_infoSOU" uiSize="size1" uiRadius="none"><img src="Data/cInfo.svg"></img></button><label class="cl_info" uiRadius="right" id="idLbl_loadedSOU"></label>
       </div>
+    </fieldset>
+    <fieldset>
+      <legend><button type="button" id="idBtn_infoError" uiSize="size1"><img src="Data/cInfo.svg"></img></button>Fehler in Excellisten</legend>
+      <label id="idLbl_missingIDs"></label>
     </fieldset>
     <fieldset>
       <legend>Download</legend>
