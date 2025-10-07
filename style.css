@@ -116,6 +116,9 @@ dialog {
   border: none;
   border-radius: var(--UIRadius);
 }
+dialog::backdrop {
+  background-color: hsl(var(--bgcBackground) / 0.8);
+}
 
 input,
 button,
