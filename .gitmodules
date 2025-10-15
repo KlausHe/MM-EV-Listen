@@ -1,0 +1,3 @@
+[submodule "KadUtils"]
+	path = KadUtils
+	url = https://github.com/KlausHe/KadUtils.git

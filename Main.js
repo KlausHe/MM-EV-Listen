@@ -1,60 +1,59 @@
-import * as KadUtils from "./Data/KadUtils.js";
-import { read, utils, writeFile } from "./Data/xlsx.mjs";
+import { utils, writeFile } from "./Data/xlsx.mjs";
+import { dbID, initEL, KadLog } from "./KadUtils/KadUtils.js";
+
+const Lbl_missingIDs = initEL({ id: "idLbl_missingIDs", resetValue: "" });
+const Lbl_loadedSOU = initEL({ id: "idLbl_loadedSOU", resetValue: "..." });
+const Lbl_fileName = initEL({ id: "idLbl_fileName", resetValue: "*.xlsx" });
+initEL({ id: "idVin_mainAssemblyNr", fn: getMainNumber, resetValue: "MM-Nummern Anlage" });
+initEL({ id: "idVin_mainAssemblyName", fn: getMainName, resetValue: "Anlagename" });
+const Area_inputMenge = initEL({ id: "idArea_inputMenge", fn: readData, resetValue: "Mengenstückliste hier einfügen" });
+const Area_inputStruktur = initEL({ id: "idArea_inputStruktur", fn: readData, resetValue: "Strukturstückliste hier einfügen" });
+
+initEL({ id: "idBtn_infoUpload", fn: openInfoUpload });
+initEL({ id: "idBtn_infoCloseUpload", fn: closeInfoUpload, resetValue: "Schliessen" });
+initEL({ id: "idBtn_infoError", fn: openInfoError });
+initEL({ id: "idBtn_infoCloseError", fn: closeInfoError, resetValue: "Schliessen" });
+
+const Btn_download = initEL({ id: "idBtn_download", fn: startDownload, resetValue: "Download" });
 
 window.onload = mainSetup;
 
 function mainSetup() {
-  KadUtils.KadDOM.resetInput(idVin_mainAssemblyNr, "MM-Nummern Anlage");
-  KadUtils.KadDOM.resetInput(idVin_mainAssemblyName, "Anlagename");
-  KadUtils.daEL(idVin_mainAssemblyNr, "input", getMainNumber);
-  KadUtils.daEL(idVin_mainAssemblyName, "input", getMainName);
-
-  KadUtils.dbID(idLbl_loadedSOU).textContent = "nicht geladen";
-  KadUtils.daEL(idVin_inputSOU, "change", (evt) => getFile(evt));
-  KadUtils.KadDOM.enableBtn(idVin_inputSOU, false);
-  KadUtils.KadDOM.enableBtn(idLbl_inputSOU, false);
-
-  KadUtils.daEL(idBtn_infoUpload, "click", openInfoUpload);
-  KadUtils.daEL(idBtn_infoCloseUpload, "click", closeInfoUpload);
-  KadUtils.daEL(idBtn_infoError, "click", openInfoError);
-  KadUtils.daEL(idBtn_infoCloseError, "click", closeInfoError);
-  KadUtils.daEL(idBtn_infoSOU, "click", openInfoSOU);
-  KadUtils.daEL(idBtn_infoCloseSOU, "click", closeInfoSOU);
-
-  KadUtils.daEL(idBtn_download, "click", startDownload);
-  KadUtils.KadDOM.enableBtn(idBtn_download, false);
-  KadUtils.dbID(idLbl_fileName).textContent = `*.xlsx`;
-
-  populateTokenList(idUL_Upload, ulInfoUpload);
-  populateTokenList(idUL_Error, ulInfoError);
-  populateTokenList(idUL_SOU, ulInfoSOU);
+  enableDownload(true);
+  Lbl_fileName.KadReset();
+  populateTokenList("idUL_Upload", ulInfoUpload);
+  populateTokenList("idUL_Error", ulInfoError);
 }
 
-const ulInfoUpload = ['Tabellenblätter müssen mit "Struktur" und "Menge" beschriftet sein!', "MM-Nummer der Hauptanlage im linken Feld eintragen", "Der Anlagenname im rechten Feld ist optional.", 'Der Button "SOU-Liste als *.xlsx" ist blockiert wenn keine MM-Nummer der Anlage eingegeben wurde'];
-const ulInfoError = ['MM-Numern von "Struktur" nicht in "Menge" enthalten!', 'Liste von MM-Nummern, die in der "Struktur"-Tabelle enthalten sind aber nicht in der "Mengen"-Tabelle.', "Durch diesen Fehler wird keine Excel-Datei ausgegeben!"];
-const ulInfoSOU = ['Mengenstückliste und Strukturstückliste mit "Zwischenablage (Daten)" auf 2 Tabellenblätter in einer Datei speichern.', 'Ist gesperrt, wenn keine MM-Nummer im Feld "MM-Nummer Anlage" eingetragen ist.'];
+const ulInfoUpload = [
+  //
+  'Strukturliste und Mengenstückliste über "Zwischenablage" kopieren und in die Textfelder einfügen.',
+  "MM-Nummer der Hauptanlage im linken Feld eintragen",
+  "Der Anlagenname im rechten Feld ist optional.",
+  'Der Button "SOU-Liste als *.xlsx" ist blockiert wenn keine sechsstellige MM-Nummer der Anlage eingegeben wurde und keine Daten vorhanden sind.',
+];
+const ulInfoError = [
+  //
+  'MM-Numern von "Struktur" nicht in "Menge" enthalten!',
+  'Liste von MM-Nummern, die in der "Struktur"-Tabelle enthalten sind aber nicht in der "Mengen"-Tabelle.',
+  "Durch diesen Fehler wird keine Excel-Datei ausgegeben!",
+];
 
 function openInfoUpload() {
-  KadUtils.dbID(idDia_Upload).showModal();
+  dbID("idDia_Upload").showModal();
 }
 function closeInfoUpload() {
-  KadUtils.dbID(idDia_Upload).close();
+  dbID("idDia_Upload").close();
 }
 function openInfoError() {
-  KadUtils.dbID(idDia_Error).showModal();
+  dbID("idDia_Error").showModal();
 }
 function closeInfoError() {
-  KadUtils.dbID(idDia_Error).close();
-}
-function openInfoSOU() {
-  KadUtils.dbID(idDia_SOU).showModal();
-}
-function closeInfoSOU() {
-  KadUtils.dbID(idDia_SOU).close();
+  dbID("idDia_Error").close();
 }
 
 function populateTokenList(parentID, list) {
-  let ulParent = KadUtils.dbID(parentID);
+  let ulParent = dbID(parentID);
   for (let token of list) {
     const li = document.createElement("li");
     li.append(token);
@@ -62,72 +61,70 @@ function populateTokenList(parentID, list) {
   }
 }
 
-let mainNumber = "";
 function getMainNumber(event) {
-  let results = event.target.value;
-  mainNumber = results.match(/\d{6}/g);
-  if (mainNumber == null) {
+  fileData.outputMainNumber = event.target.value;
+  if (fileData.outputMainNumber == "") fileData.outputMainNumber = null;
+  updateMainName();
+}
+
+function getMainName(event) {
+  fileData.outputMainName = event.target.value;
+  if (fileData.outputMainName == "") fileData.outputMainName = null;
+  updateMainName();
+}
+
+function updateMainName() {
+  if (fileData.outputMainNumber === null || fileData.outputMainNumber.toString().length != 6) {
+    enableDownload();
+    Lbl_fileName.KadReset();
     return;
   }
-  mainNumber = Number(mainNumber);
-  KadUtils.KadDOM.enableBtn(idVin_inputSOU, true);
-  KadUtils.KadDOM.enableBtn(idLbl_inputSOU, true);
-  KadUtils.dbID(idLbl_fileName).textContent = `${mainNumberPadded(mainNumber)}_${mainName}.xlsx`;
+  if (fileData.outputMainName == null) {
+    fileData.outputName = `${mainNumberPadded(fileData.outputMainNumber)}.xlsx`;
+  } else {
+    fileData.outputName = `${mainNumberPadded(fileData.outputMainNumber)}_${fileData.outputMainName}.xlsx`;
+  }
+  enableDownload();
+  Lbl_fileName.KadSetText(fileData.outputName);
 }
-function mainNumberPadded(num) {
+
+function mainNumberPadded(num = null) {
+  if (num == null) return "";
   return num.toString().padStart(6, "0");
 }
 
-let mainName = "";
-function getMainName(event) {
-  mainName = event.target.value;
-  KadUtils.dbID(idLbl_fileName).textContent = `${mainNumberPadded(mainNumber)}_${mainName}.xlsx`;
-}
-
 const fileData = {
+  rawStringAvailableObj: {
+    Menge: null,
+    Struktur: null,
+  },
+  get rawStringAvailable() {
+    return this.rawStringAvailableObj.Menge && this.rawStringAvailableObj.Struktur;
+  },
+  rawStringData: {
+    Menge: null,
+    Struktur: null,
+  },
   rawData: {
     Menge: null,
     Struktur: null,
   },
+  listData: [],
   outputName: "",
+  outputMainNumber: null,
 };
 
-function getFile(file) {
-  fileData.rawData = {};
-
-  let selectedFile = file.target.files[0];
-  let fileReader = new FileReader();
-
-  fileReader.onload = (event) => {
-    const data = event.target.result;
-    let workbook = read(data, { type: "binary" });
-    let error = 2;
-    workbook.SheetNames.forEach((sheet) => {
-      const title = KadUtils.KadString.firstLetterCap(sheet);
-      if (title == "Struktur" || title == "Menge") {
-        error--;
-        const data = utils.sheet_to_row_object_array(workbook.Sheets[sheet]);
-        fileData.rawData[title] = data;
-      }
-    });
-    if (error < 0) {
-      alert(ulInfoUpload[0]);
-      return;
-    }
-    fileIsParsed();
-    parseFile();
-  };
-  fileReader.readAsBinaryString(selectedFile);
+function readData() {
+  fileData.rawStringData.Menge = Area_inputMenge.KadGet({ noPlaceholder: true });
+  fileData.rawStringAvailableObj.Menge = fileData.rawStringData.Menge != "";
+  fileData.rawStringData.Struktur = Area_inputStruktur.KadGet({ noPlaceholder: true });
+  fileData.rawStringAvailableObj.Struktur = fileData.rawStringData.Struktur != "";
+  if (fileData.rawStringAvailable) {
+    parseStringData("Menge");
+    parseStringData("Struktur");
+  }
+  enableDownload();
 }
-
-function fileIsParsed() {
-  KadUtils.KadDOM.btnColor(idLbl_inputSOU, "positive");
-  setTimeout(() => {
-    KadUtils.KadDOM.btnColor(idLbl_inputSOU, null);
-  }, 3000);
-}
-
-// -----------------------------
 
 const mmID = "ArtikelNr";
 const name = "Bezeichnung";
@@ -141,21 +138,79 @@ const dataObject = {
   partData: {},
   listData: [],
   evArray: [],
+  missingIDs: {},
 };
 
-let missingIDs = {};
+function parseStringData(type) {
+  fileData.rawData[type] = [];
+  let rows = fileData.rawStringData[type].split("\n");
+  let headerFields = rows.splice(0, 1)[0].split("\t");
+  headerFields.splice(-1, 1);
 
+  for (let row of rows) {
+    const data = row.split("\t");
+    if (data[0] === "") continue;
+    let obj = {};
+    for (let i = 0; i < headerFields.length; i++) {
+      if (data[i] == "") {
+        obj[headerFields[i]] = "";
+      } else if (isNaN(Number(data[i]))) {
+        obj[headerFields[i]] = data[i];
+      } else {
+        obj[headerFields[i]] = Number(data[i]);
+      }
+    }
+    fileData.rawData[type].push(obj);
+  }
+}
+
+function enableDownload(enable = null) {
+  if (enable === false) {
+    Btn_download.KadEnable(false);
+    return;
+  }
+  let state = fileData.rawStringAvailable && fileData.outputName != "" ? true : false;
+  Btn_download.KadEnable(state);
+
+  if (state) parseFile();
+}
+
+function startDownload() {
+  const book = utils.book_new();
+  dataObject.listData.unshift(["Zeichnung", name, "EV-Nummern"]);
+  const listData = utils.aoa_to_sheet(dataObject.listData);
+  utils.book_append_sheet(book, listData, "Baugruppen");
+  writeFile(book, fileData.outputName);
+}
+
+function findParentAndAddAsChild(i, childID, startLevel) {
+  let tempLevel = startLevel;
+  let tempID = childID;
+  for (let p = i - 1; p >= 0; p--) {
+    const higherID = Number(fileData.rawData.Struktur[p][mmID]);
+    const higherLevel = Number(fileData.rawData.Struktur[p].Ebene);
+    if (tempLevel <= higherLevel) continue;
+    const higherObj = dataObject.partData[higherID];
+    if (!higherObj.children.includes(tempID)) {
+      higherObj.children.push(tempID);
+    }
+    tempID = higherID;
+    tempLevel--;
+  }
+}
+
+// main calculating function!!!!
 function parseFile() {
-  dataObject.evArray = [];
+  Lbl_missingIDs.KadReset();
   dataObject.partData = {};
-  missingIDs = {};
-  idLbl_missingIDs.innerHTML = "";
-  //inject "MAIN"
+  dataObject.listData = [];
+  dataObject.evArray = [];
+  dataObject.missingIDs = {};
 
-  dataObject.partData[mainNumber] = {
-    [mmID]: mainNumber,
-    [name]: mainName,
-    [count]: 1,
+  //inject "Header"
+  dataObject.partData[fileData.outputMainNumber] = {
+    [mmID]: fileData.outputMainNumber,
+    [name]: fileData.outputMainName,
     [sparePart]: false,
     [wearPart]: false,
     [partFamily]: "",
@@ -164,9 +219,10 @@ function parseFile() {
   };
   fileData.rawData.Struktur.unshift({
     ArtikelArt: "F",
-    ArtikelNr: mainNumber,
+    ArtikelNr: fileData.outputMainNumber,
     Baustein: "D",
-    Bezeichnung: mainName,
+    Bezeichnung: fileData.outputMainName,
+
     Ebene: "0",
     Einheit: "Stk",
     Gesperrt: "false",
@@ -174,7 +230,6 @@ function parseFile() {
     Menge: "1,00",
     PosNr: "10",
   });
-
   for (let obj of fileData.rawData.Menge) {
     let id = Number(obj[mmID]); // get MM-Nummer
 
@@ -188,20 +243,19 @@ function parseFile() {
       dataObject.evArray.push(id);
     }
   }
-  KadUtils.dbID(idLbl_loadedSOU).textContent = `${dataObject.evArray.length} E/V-Teile gefunden`;
+  Lbl_loadedSOU.KadSetText(dataObject.evArray.length);
 
-  // console.log(dataObject.partData["153707"]);
   for (let i = 0; i < fileData.rawData.Struktur.length; i++) {
     const currObj = fileData.rawData.Struktur[i];
     const id = Number(currObj[mmID]);
     if (dataObject.partData[id] == undefined) {
-      const newID = !missingIDs.hasOwnProperty(id);
+      const newID = !dataObject.missingIDs.hasOwnProperty(id);
       if (newID) {
-        missingIDs[id] = [currObj];
+        dataObject.missingIDs[id] = [currObj];
       } else {
-        missingIDs[id].push(currObj);
+        dataObject.missingIDs[id].push(currObj);
       }
-      idLbl_missingIDs.innerHTML += `${id.toString().padStart(6, 0)}<br>`;
+      Lbl_missingIDs.KadSetHTML(`${id.toString().padStart(6, 0)}<br>`);
       continue;
     }
 
@@ -210,6 +264,7 @@ function parseFile() {
 
     // find all parents
     if (dataObject.evArray.includes(Number(currObj[mmID]))) {
+      KadLog.log(currObj, mmID);
       findParentAndAddAsChild(i, id, level);
     }
   }
@@ -218,37 +273,9 @@ function parseFile() {
   for (let i = 0; i < fileData.rawData.Struktur.length; i++) {
     const currObj = fileData.rawData.Struktur[i];
     const id = Number(currObj[mmID]);
-
     if (dataObject.partData[id].children.length == 0) continue;
     if (dataObject.listData.some((arr) => arr[0] == id)) continue;
 
     dataObject.listData.push([id, dataObject.partData[id][name], ...dataObject.partData[id].children]);
   }
-  KadUtils.KadDOM.enableBtn(idBtn_download, true);
-}
-
-function findParentAndAddAsChild(i, childID, startLevel) {
-  let tempLevel = startLevel;
-  let tempID = childID;
-  for (let p = i - 1; p >= 0; p--) {
-    const higherID = Number(fileData.rawData.Struktur[p][mmID]);
-    const higherLevel = Number(fileData.rawData.Struktur[p].Ebene);
-    if (tempLevel <= higherLevel) continue;
-
-    const higherObj = dataObject.partData[higherID];
-    if (!higherObj.children.includes(tempID)) {
-      higherObj.children.push(tempID);
-    }
-
-    tempID = higherID;
-    tempLevel--;
-  }
-}
-
-function startDownload() {
-  const book = utils.book_new();
-  dataObject.listData.unshift(["Zeichnung", name, "EV-Nummern"]);
-  const listData = utils.aoa_to_sheet(dataObject.listData);
-  utils.book_append_sheet(book, listData, "Baugruppen");
-  writeFile(book, `${mainNumberPadded(mainNumber)}_${mainName}_EV.xlsx`);
 }

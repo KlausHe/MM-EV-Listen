@@ -63,10 +63,11 @@
   --UIWidth30: calc(var(--UIHeight1) * 30);
 
   /**/
-  --borderThin: 0.042rem solid hsl(var(--bgcNavbar));
-  --borderThinInverse: 0.042rem solid hsl(var(--txtNavbar));
+  --UIBorderThin: 0.042rem solid hsl(var(--bgcNavbar));
+  --UIBorderThinInverse: 0.042rem solid hsl(var(--txtNavbar));
   --UIBorderRight: 0.5rem solid hsl(var(--bgcNavbar));
   --UIBorderBottom: 0.3rem solid hsl(var(--bgcNavbar));
+
   /* IMAGES */
   --imgSize: 1.25rem;
   /* SONSTIGES */
@@ -116,6 +117,7 @@ dialog {
   border: none;
   border-radius: var(--UIRadius);
 }
+
 dialog::backdrop {
   background-color: hsl(var(--bgcBackground) / 0.8);
 }
@@ -130,7 +132,7 @@ textarea {
   text-decoration: none;
   background-color: hsl(var(--bgcButton));
   color: hsl(var(--txtButton));
-  border: var(--borderThin);
+  border: var(--UIBorderThin);
   border-radius: var(--UIRadius);
   padding: 0;
   vertical-align: middle;
@@ -143,6 +145,10 @@ textarea:hover {
   color: hsl(var(--txtNavbar));
   transition-duration: 0.1s;
   transition-delay: 0s;
+}
+
+textarea {
+  padding: var(--padding);
 }
 
 ol,
@@ -166,7 +172,7 @@ label:disabled {
 fieldset {
   width: var(--UIWidth20);
   padding: var(--padding);
-  border: var(--borderThin);
+  border: var(--UIBorderThin);
   border-radius: var(--UIRadius);
   margin-bottom: var(--UIHeight1);
   display: grid;
@@ -282,7 +288,7 @@ input[type="image"] {
   color: hsl(var(--txtBackground));
   width: var(--UIWidth8);
   line-height: 150%;
-  border: var(--borderThin);
+  border: var(--UIBorderThin);
   border-radius: var(--UIRadius);
   text-align: center;
 }
@@ -304,7 +310,7 @@ input[type="image"] {
   color: hsl(var(--txtNavbar));
   border-radius: var(--LayoutRadius);
   font-size: var(--fontSizeLarge);
-  border: var(--borderThinInverse);
+  border: var(--UIBorderThinInverse);
   min-height: var(--UIHeight2);
   min-width: var(--UIWidth12);
   display: -webkit-box;
@@ -323,7 +329,7 @@ input[type="image"] {
 
 .cl_outputText {
   padding: var(--padding);
-  border-top: var(--borderThin);
+  border-top: var(--UIBorderThin);
 }
 
 [data-btnstatus="btnPositive"] {
@@ -350,73 +356,83 @@ input[type="image"] {
   width: var(--imgSize);
 }
 
-[uiSize~="size1"] {
+[uiSize~="width1"] {
   width: var(--UIWidth1);
 }
-[uiSize~="size2"] {
+[uiSize~="width2"] {
   width: var(--UIWidth2);
 }
-[uiSize~="size3"] {
+[uiSize~="width3"] {
   width: var(--UIWidth3);
 }
-[uiSize~="size4"] {
+[uiSize~="width4"] {
   width: var(--UIWidth4);
 }
-[uiSize~="size5"] {
+[uiSize~="width5"] {
   width: var(--UIWidth5);
 }
-[uiSize~="size6"] {
+[uiSize~="width6"] {
   width: var(--UIWidth6);
 }
-[uiSize~="size7"] {
+[uiSize~="width7"] {
   width: var(--UIWidth7);
 }
-[uiSize~="size8"] {
+[uiSize~="width8"] {
   width: var(--UIWidth8);
 }
-[uiSize~="size9"] {
+[uiSize~="width9"] {
   width: var(--UIWidth9);
 }
-[uiSize~="size10"] {
+[uiSize~="width10"] {
   width: var(--UIWidth10);
 }
-[uiSize~="size11"] {
+[uiSize~="width11"] {
   width: var(--UIWidth11);
 }
-[uiSize~="size12"] {
+[uiSize~="width12"] {
   width: var(--UIWidth12);
 }
-[uiSize~="size13"] {
+[uiSize~="width13"] {
   width: var(--UIWidth13);
 }
-[uiSize~="size14"] {
+[uiSize~="width14"] {
   width: var(--UIWidth14);
 }
-[uiSize~="size15"] {
+[uiSize~="width15"] {
   width: var(--UIWidth15);
 }
-[uiSize~="size16"] {
+[uiSize~="width16"] {
   width: var(--UIWidth16);
 }
-[uiSize~="size17"] {
+[uiSize~="width17"] {
   width: var(--UIWidth17);
 }
-[uiSize~="size18"] {
+[uiSize~="width18"] {
   width: var(--UIWidth18);
 }
-[uiSize~="size19"] {
+[uiSize~="width19"] {
   width: var(--UIWidth19);
 }
-[uiSize~="size20"] {
+[uiSize~="width20"] {
   width: var(--UIWidth20);
+}
+[uiSize~="width25"] {
+  width: var(--UIWidth25);
+}
+[uiSize~="width30"] {
+  width: var(--UIWidth30);
 }
 
 [uiSize~="height2"] {
   height: var(--UIHeight2);
+  /* line-height: 300%; */
 }
 
 [uiSize~="height3"] {
   height: var(--UIHeight3);
+}
+[uiSize~="height20"] {
+  height: var(--UIWidth20);
 }
 
 [uiSize~="outputTable"] {
@@ -465,4 +481,94 @@ input[type="image"] {
 
 [uiAlign~="right"] {
   text-align: right;
+}
+
+/* Grid Table */
+.KadUtilsGridTable {
+  display: grid;
+  position: relative;
+  grid-auto-flow: column;
+  color: hsl(var(--txtBackground));
+  margin: var(--padding);
+  /* white-space: nowrap; */
+}
+
+.KadUtilsTableWrapper {
+  display: inline-block;
+  align-content: center;
+}
+
+.KadUtilsTableWrapper:hover {
+  background-color: hsl(var(--bgcNavbar) / 0.2);
+  color: hsl(var(--txtNavbar));
+  transition: all var(--transitionTimeInfo) ease-in-out;
+}
+
+.KadUtilsTableItem {
+  display: inline-block;
+  background-color: hsl(var(--bgcBackground) / 0.2);
+  color: hsl(var(--txtBackground));
+  font-size: small;
+  padding: var(--paddingVertical) var(--padding);
+}
+
+.KadUtilsGridTableWrapperHeader {
+  z-index: 2;
+  background: linear-gradient(to right, hsl(var(--bgcSubgrid) / var(--opacitySubgrid)), hsl(var(--bgcSubgrid) / var(--opacitySubgrid))), linear-gradient(to right, hsl(var(--bgcBackground)), hsl(var(--bgcBackground)));
+  padding: var(--paddingVertical) var(--padding);
+}
+
+.KadUtilsGridTableWrapperHeader > * {
+  font-size: small;
+  font-weight: bold;
+  background-color: hsl(var(--bgcBackground) / 0.2);
+  color: hsl(var(--txtBackground));
+}
+
+.KadUtilsBorderTopThin {
+  border-top: var(--UIBorderThin);
+}
+
+.KadUtilsBorderRightThin {
+  border-right: var(--UIBorderThin);
+}
+
+.KadUtilsBorderBottomThin {
+  border-bottom: var(--UIBorderThin);
+}
+
+.KadUtilsBorderLeftThin {
+  border-left: var(--UIBorderThin);
+}
+
+.KadUtilsBorderTopThick {
+  border-top: var(--UIBorderBottom);
+}
+
+.KadUtilsBorderRightThick {
+  border-right: var(--UIBorderBottom);
+}
+
+.KadUtilsBorderBottomThick {
+  border-bottom: var(--UIBorderBottom);
+}
+
+.KadUtilsBorderLeftThick {
+  border-left: var(--UIBorderBottom);
+}
+
+.KadUtilsBorderTopNone {
+  border-top: none;
+}
+
+.KadUtilsBorderRightNone {
+  border-right: none;
+}
+
+.KadUtilsBorderBottomNone {
+  border-bottom: none;
+}
+
+.KadUtilsBorderLeftNone {
+  border-left: none;
 }
