@@ -145,7 +145,13 @@ function parseStringData(type) {
   fileData.rawData[type] = [];
   let rows = fileData.rawStringData[type].split("\n");
   let headerFields = rows.splice(0, 1)[0].split("\t");
-  headerFields.splice(-1, 1);
+  for (let i = headerFields.length - 1; i > 0; i--) {
+    if (headerFields[i] === "") {
+      headerFields.splice(i, 1);
+    } else {
+      break;
+    }
+  }
 
   for (let row of rows) {
     const data = row.split("\t");
