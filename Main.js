@@ -1,5 +1,5 @@
 import { utils, writeFile } from "./Data/xlsx.mjs";
-import { dbID, initEL, KadLog } from "./KadUtils/KadUtils.js";
+import { dbID, initEL } from "./KadUtils/KadUtils.js";
 
 const Lbl_missingIDs = initEL({ id: "idLbl_missingIDs", resetValue: "" });
 const Lbl_loadedSOU = initEL({ id: "idLbl_loadedSOU", resetValue: "..." });
@@ -270,7 +270,6 @@ function parseFile() {
 
     // find all parents
     if (dataObject.evArray.includes(Number(currObj[mmID]))) {
-      KadLog.log(currObj, mmID);
       findParentAndAddAsChild(i, id, level);
     }
   }
