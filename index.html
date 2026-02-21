@@ -35,7 +35,15 @@
       <button type="button" id="idBtn_infoCloseSOU" autofocus>Schließen</button>
     </fieldset>
   </dialog>
-  <main>
+  <dialog id="idDia_Filter">
+    <fieldset>
+      <legend>Infos zu Filtern</legend>
+      <ul id="idUL_Filter"> </ul>
+      <button type="button" id="idBtn_infoCloseFilter" autofocus>Schließen</button>
+    </fieldset>
+  </dialog>
+
+  <main id="main">
     <div>
       <h1>MM-EV-Liste</h1>
     </div>
@@ -50,7 +58,7 @@
       </div>
     </fieldset>
     <fieldset>
-      <legend><button type="button" id="idBtn_infoError" uiSize="width1"><img src="Data/cInfo.svg"></img></button>Fehler in Excellisten</legend>
+      <legend><button type="button" id="idBtn_infoError" uiSize="width1"><img src="Data/cInfo.svg"></img></button>Fehler in Listen</legend>
       <label id="idLbl_missingIDs"></label>
     </fieldset>
     <fieldset>

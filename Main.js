@@ -1,10 +1,10 @@
 import { utils, writeFile } from "./Data/xlsx.mjs";
 import { dbID, initEL } from "./KadUtils/KadUtils.js";
 
-const Lbl_missingIDs = initEL({ id: "idLbl_missingIDs", resetValue: "" });
+const Lbl_missingIDs = initEL({ id: "idLbl_missingIDs", resetValue: "Keine Fehler gefunden" });
 const Lbl_loadedSOU = initEL({ id: "idLbl_loadedSOU", resetValue: "..." });
 const Lbl_fileName = initEL({ id: "idLbl_fileName", resetValue: "*.xlsx" });
-initEL({ id: "idVin_mainAssemblyNr", fn: getMainNumber, resetValue: "MM-Nummern Anlage" });
+const Vin_mainAssemblyNr = initEL({ id: "idVin_mainAssemblyNr", fn: getMainNumber, resetValue: "MM-Nummern Anlage" });
 initEL({ id: "idVin_mainAssemblyName", fn: getMainName, resetValue: "Anlagename" });
 const Area_inputMenge = initEL({ id: "idArea_inputMenge", fn: readData, resetValue: "Mengenstückliste hier einfügen" });
 const Area_inputStruktur = initEL({ id: "idArea_inputStruktur", fn: readData, resetValue: "Strukturstückliste hier einfügen" });
@@ -21,6 +21,7 @@ window.onload = mainSetup;
 function mainSetup() {
   enableDownload(true);
   Lbl_fileName.KadReset();
+  Vin_mainAssemblyNr.KadSetValue(32132);
   populateTokenList("idUL_Upload", ulInfoUpload);
   populateTokenList("idUL_Error", ulInfoError);
 }
@@ -34,9 +35,8 @@ const ulInfoUpload = [
 ];
 const ulInfoError = [
   //
-  'MM-Numern von "Struktur" nicht in "Menge" enthalten!',
-  'Liste von MM-Nummern, die in der "Struktur"-Tabelle enthalten sind aber nicht in der "Mengen"-Tabelle.',
-  "Durch diesen Fehler wird keine Excel-Datei ausgegeben!",
+  'MM-Numern aus "Struktur" nicht in "Menge" enthalten! Prüfe deine Eingabe!',
+  "Es wird keine Excel-Datei ausgegeben!",
 ];
 
 function openInfoUpload() {
@@ -132,14 +132,8 @@ const count = "Menge";
 const sparePart = "Ersatzteil";
 const wearPart = "Verschleissteil";
 const partFamily = "ArtikelTeileFamilie";
-const partDataFields = [mmID, name, count, sparePart, wearPart, partFamily];
-
-const dataObject = {
-  partData: {},
-  listData: [],
-  evArray: [],
-  missingIDs: {},
-};
+const matchcode = "Matchcode";
+const partDataFields = [mmID, name, matchcode, count, sparePart, wearPart, partFamily];
 
 function parseStringData(type) {
   fileData.rawData[type] = [];
@@ -176,17 +170,10 @@ function enableDownload(enable = null) {
     return;
   }
   let state = fileData.rawStringAvailable && fileData.outputName != "" ? true : false;
+
+  if (state) state = parseFile();
+
   Btn_download.KadEnable(state);
-
-  if (state) parseFile();
-}
-
-function startDownload() {
-  const book = utils.book_new();
-  dataObject.listData.unshift(["Zeichnung", name, "EV-Nummern"]);
-  const listData = utils.aoa_to_sheet(dataObject.listData);
-  utils.book_append_sheet(book, listData, "Baugruppen");
-  writeFile(book, fileData.outputName);
 }
 
 function findParentAndAddAsChild(i, childID, startLevel) {
@@ -205,18 +192,27 @@ function findParentAndAddAsChild(i, childID, startLevel) {
   }
 }
 
+const dataObject = {
+  partData: {},
+  partslist: [],
+  listData: [],
+  evArray: [],
+};
+
 // main calculating function!!!!
 function parseFile() {
+  document.getElementById("main").classList.remove("rotateoOnce");
   Lbl_missingIDs.KadReset();
   dataObject.partData = {};
   dataObject.listData = [];
+  dataObject.listDataArr = [];
   dataObject.evArray = [];
-  dataObject.missingIDs = {};
 
   //inject "Header"
   dataObject.partData[fileData.outputMainNumber] = {
     [mmID]: fileData.outputMainNumber,
     [name]: fileData.outputMainName,
+    [matchcode]: "",
     [sparePart]: false,
     [wearPart]: false,
     [partFamily]: "",
@@ -228,7 +224,6 @@ function parseFile() {
     ArtikelNr: fileData.outputMainNumber,
     Baustein: "D",
     Bezeichnung: fileData.outputMainName,
-
     Ebene: "0",
     Einheit: "Stk",
     Gesperrt: "false",
@@ -255,18 +250,14 @@ function parseFile() {
     const currObj = fileData.rawData.Struktur[i];
     const id = Number(currObj[mmID]);
     if (dataObject.partData[id] == undefined) {
-      const newID = !dataObject.missingIDs.hasOwnProperty(id);
-      if (newID) {
-        dataObject.missingIDs[id] = [currObj];
-      } else {
-        dataObject.missingIDs[id].push(currObj);
-      }
       Lbl_missingIDs.KadSetHTML(`${id.toString().padStart(6, 0)}<br>`);
-      continue;
+      document.getElementById("main").classList.add("rotateoOnce");
+      return false;
     }
 
     const level = Number(currObj.Ebene);
     dataObject.partData[id].level = level;
+    dataObject.partData[id][matchcode] = currObj.Matchcode;
 
     // find all parents
     if (dataObject.evArray.includes(Number(currObj[mmID]))) {
@@ -274,13 +265,54 @@ function parseFile() {
     }
   }
 
-  dataObject.listData = [];
   for (let i = 0; i < fileData.rawData.Struktur.length; i++) {
     const currObj = fileData.rawData.Struktur[i];
     const id = Number(currObj[mmID]);
     if (dataObject.partData[id].children.length == 0) continue;
     if (dataObject.listData.some((arr) => arr[0] == id)) continue;
 
-    dataObject.listData.push([id, dataObject.partData[id][name], ...dataObject.partData[id].children]);
+    dataObject.listData.push([id, dataObject.partData[id][name], dataObject.partData[id][matchcode], ...dataObject.partData[id].children]);
+    dataObject.listDataArr.push([id, dataObject.partData[id].children]);
   }
+  generatePartslists();
+  return true;
+}
+
+function generatePartslists() {
+  dataObject.partslist = [];
+  for (let list of dataObject.listDataArr) {
+    let data = [];
+    for (let id of list[1]) {
+      let arr = [];
+      for (let field of partDataFields) {
+        arr.push(dataObject.partData[id][field]);
+      }
+      data.push(arr);
+    }
+    dataObject.partslist.push({ data, sheetname: list[0] });
+  }
+}
+
+function startDownload() {
+  const book = utils.book_new();
+
+  const listEV = [["Zeichnung", name, matchcode, "EV-Nummern"], ...dataObject.listData];
+  const sheetEV = utils.aoa_to_sheet(listEV);
+  for (let i = 1; i < listEV.length; i++) {
+    const id = listEV[i][0];
+    const cellAddress = utils.encode_cell({ c: 0, r: i });
+    utils.cell_set_internal_link((sheetEV[cellAddress].l = { Target: `#${id}!A1`, Tooltip: "Gehe zu Baugruppe" }));
+  }
+
+  utils.book_append_sheet(book, sheetEV, "Baugruppen");
+
+  for (let plist of dataObject.partslist) {
+    const listPL = [[...partDataFields], ...plist.data];
+    const sheetPL = utils.aoa_to_sheet(listPL);
+    utils.book_append_sheet(book, sheetPL, `${plist.sheetname}`);
+    utils.cell_set_internal_link((sheetPL["A1"].l = { Target: `#Baugruppen!A1`, Tooltip: "Gehe zu Übersicht" }));
+  }
+  writeFile(book, fileData.outputName);
+
+  document.getElementById("body").classList.add("rotateoOnce");
 }
