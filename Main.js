@@ -3,7 +3,8 @@ import { dbID, initEL } from "./KadUtils/KadUtils.js";
 
 const Lbl_missingIDs = initEL({ id: "idLbl_missingIDs", resetValue: "Keine Fehler gefunden" });
 const Lbl_loadedSOU = initEL({ id: "idLbl_loadedSOU", resetValue: "..." });
-const Lbl_fileName = initEL({ id: "idLbl_fileName", resetValue: "*.xlsx" });
+const Lbl_fileNameEV = initEL({ id: "idLbl_fileNameEV", resetValue: "*-EV.xlsx" });
+const Lbl_fileNameSTL = initEL({ id: "idLbl_fileNameSTL", resetValue: "*-STL.xlsx" });
 const Vin_mainAssemblyNr = initEL({ id: "idVin_mainAssemblyNr", fn: getMainNumber, resetValue: "MM-Nummern Anlage" });
 initEL({ id: "idVin_mainAssemblyName", fn: getMainName, resetValue: "Anlagename" });
 const Area_inputMenge = initEL({ id: "idArea_inputMenge", fn: readData, resetValue: "Mengenstückliste hier einfügen" });
@@ -14,14 +15,16 @@ initEL({ id: "idBtn_infoCloseUpload", fn: closeInfoUpload, resetValue: "Schliess
 initEL({ id: "idBtn_infoError", fn: openInfoError });
 initEL({ id: "idBtn_infoCloseError", fn: closeInfoError, resetValue: "Schliessen" });
 
-const Btn_download = initEL({ id: "idBtn_download", fn: startDownload, resetValue: "Download" });
+const Btn_downloadEV = initEL({ id: "idBtn_downloadEV", fn: startDownloadEV, resetValue: "Download EV" });
+const Btn_downloadSTL = initEL({ id: "idBtn_downloadSTL", fn: startDownloadSTL, resetValue: "Download STL" });
 
 window.onload = mainSetup;
 
 function mainSetup() {
   enableDownload(true);
-  Lbl_fileName.KadReset();
-  Vin_mainAssemblyNr.KadSetValue(32132);
+  Lbl_fileNameEV.KadReset();
+  Lbl_fileNameSTL.KadReset();
+  Vin_mainAssemblyNr.KadReset();
   populateTokenList("idUL_Upload", ulInfoUpload);
   populateTokenList("idUL_Error", ulInfoError);
 }
@@ -76,16 +79,22 @@ function getMainName(event) {
 function updateMainName() {
   if (fileData.outputMainNumber === null || fileData.outputMainNumber.toString().length != 6) {
     enableDownload();
-    Lbl_fileName.KadReset();
+    Lbl_fileNameEV.KadReset();
+    Lbl_fileNameSTL.KadReset();
     return;
   }
+  let fName = "";
   if (fileData.outputMainName == null) {
-    fileData.outputName = `${mainNumberPadded(fileData.outputMainNumber)}.xlsx`;
+    fName = `${mainNumberPadded(fileData.outputMainNumber)}`;
   } else {
-    fileData.outputName = `${mainNumberPadded(fileData.outputMainNumber)}_${fileData.outputMainName}.xlsx`;
+    fName = `${mainNumberPadded(fileData.outputMainNumber)}_${fileData.outputMainName}`;
   }
+  fileData.outputNameEV = `${fName}-EV.xlsx`;
+  fileData.outputNameSTL = `${fName}-STL.xlsx`;
+
   enableDownload();
-  Lbl_fileName.KadSetText(fileData.outputName);
+  Lbl_fileNameEV.KadSetText(fileData.outputNameEV);
+  Lbl_fileNameSTL.KadSetText(fileData.outputNameSTL);
 }
 
 function mainNumberPadded(num = null) {
@@ -110,7 +119,8 @@ const fileData = {
     Struktur: null,
   },
   listData: [],
-  outputName: "",
+  outputNameEV: "",
+  outputNameSTL: "",
   outputMainNumber: null,
 };
 
@@ -166,14 +176,16 @@ function parseStringData(type) {
 
 function enableDownload(enable = null) {
   if (enable === false) {
-    Btn_download.KadEnable(false);
+    Btn_downloadEV.KadEnable(false);
+    Btn_downloadSTL.KadEnable(false);
     return;
   }
-  let state = fileData.rawStringAvailable && fileData.outputName != "" ? true : false;
+  let state = fileData.rawStringAvailable && fileData.outputNameEV != "" ? true : false;
 
   if (state) state = parseFile();
 
-  Btn_download.KadEnable(state);
+  Btn_downloadEV.KadEnable(state);
+  Btn_downloadSTL.KadEnable(state);
 }
 
 function findParentAndAddAsChild(i, childID, startLevel) {
@@ -250,7 +262,7 @@ function parseFile() {
     const currObj = fileData.rawData.Struktur[i];
     const id = Number(currObj[mmID]);
     if (dataObject.partData[id] == undefined) {
-      Lbl_missingIDs.KadSetHTML(`${id.toString().padStart(6, 0)}<br>`);
+      Lbl_missingIDs.KadSetText(`Fehlende Teile ${id.toString().padStart(6, 0)}`);
       document.getElementById("main").classList.add("rotateoOnce");
       return false;
     }
@@ -293,26 +305,21 @@ function generatePartslists() {
   }
 }
 
-function startDownload() {
+function startDownloadEV() {
   const book = utils.book_new();
-
   const listEV = [["Zeichnung", name, matchcode, "EV-Nummern"], ...dataObject.listData];
   const sheetEV = utils.aoa_to_sheet(listEV);
-  for (let i = 1; i < listEV.length; i++) {
-    const id = listEV[i][0];
-    const cellAddress = utils.encode_cell({ c: 0, r: i });
-    utils.cell_set_internal_link((sheetEV[cellAddress].l = { Target: `#${id}!A1`, Tooltip: "Gehe zu Baugruppe" }));
-  }
-
   utils.book_append_sheet(book, sheetEV, "Baugruppen");
+  writeFile(book, fileData.outputNameEV);
+}
 
+function startDownloadSTL() {
+  const book = utils.book_new();
   for (let plist of dataObject.partslist) {
     const listPL = [[...partDataFields], ...plist.data];
     const sheetPL = utils.aoa_to_sheet(listPL);
     utils.book_append_sheet(book, sheetPL, `${plist.sheetname}`);
-    utils.cell_set_internal_link((sheetPL["A1"].l = { Target: `#Baugruppen!A1`, Tooltip: "Gehe zu Übersicht" }));
   }
-  writeFile(book, fileData.outputName);
 
-  document.getElementById("body").classList.add("rotateoOnce");
+  writeFile(book, fileData.outputNameSTL);
 }

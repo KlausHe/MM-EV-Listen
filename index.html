@@ -42,7 +42,6 @@
       <button type="button" id="idBtn_infoCloseFilter" autofocus>Schließen</button>
     </fieldset>
   </dialog>
-
   <main id="main">
     <div>
       <h1>MM-EV-Liste</h1>
@@ -53,20 +52,21 @@
         <input type="number" uiRadius="left" id="idVin_mainAssemblyNr"></input><input type="text" uiRadius="right" id="idVin_mainAssemblyName"></input>
       </div>
       <div>
-        <label class="cl_info" for="idArea_inputMenge" uiRadius="top" uiSize="width8">Mengenstückliste</label> <label class="cl_info" for="idArea_inputStruktur" uiRadius="top" uiSize="width8">Strukturstückliste</label>
-        <textarea id="idArea_inputMenge" uiRadius="bottom" uiSize="width8 height3"></textarea> <textarea id="idArea_inputStruktur" uiRadius="bottom" uiSize="width8 height3"></textarea>
+        <label class="cl_info" for="idArea_inputMenge" uiRadius="top left" uiSize="width8">Mengenstückliste</label><label class="cl_info" for="idArea_inputStruktur" uiRadius="top right" uiSize="width8">Strukturstückliste</label><textarea
+          id="idArea_inputMenge" uiRadius="bottom left" uiSize="width8 height3"></textarea><textarea id="idArea_inputStruktur" uiRadius="bottom right" uiSize="width8 height3"></textarea>
       </div>
     </fieldset>
     <fieldset>
       <legend><button type="button" id="idBtn_infoError" uiSize="width1"><img src="Data/cInfo.svg"></img></button>Fehler in Listen</legend>
-      <label id="idLbl_missingIDs"></label>
+      <label id="idLbl_missingIDs" class="cl_info" uiSize="width16"></label>
     </fieldset>
     <fieldset>
       <legend>Download</legend>
       <div>
         <label class="cl_info" uiRadius="left" id="idLbl_loadedSOU"></label><label class="cl_info" uiRadius="right">E/V-Teile gefunden</label>
       </div>
-      <div><button uiRadius="left" id="idBtn_download">Download</button><label class="cl_info" uiRadius="right" id="idLbl_fileName"></label></div>
+      <div><button uiRadius="left" id="idBtn_downloadEV"></button><label class="cl_info" uiRadius="right" id="idLbl_fileNameEV"></label></div>
+      <div><button uiRadius="left" id="idBtn_downloadSTL"></button><label class="cl_info" uiRadius="right" id="idLbl_fileNameSTL"></label></div>
     </fieldset>
   </main>
 </body>

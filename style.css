@@ -193,7 +193,7 @@ label:disabled {
 }
 
 fieldset {
-  width: var(--UIWidth20);
+  width: var(--UIWidth17);
   padding: var(--padding);
   border: var(--UIBorderThin);
   border-radius: var(--UIRadius);
