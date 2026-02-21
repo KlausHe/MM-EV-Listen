@@ -143,7 +143,12 @@ const sparePart = "Ersatzteil";
 const wearPart = "Verschleissteil";
 const partFamily = "ArtikelTeileFamilie";
 const matchcode = "Matchcode";
-const partDataFields = [mmID, name, matchcode, count, sparePart, wearPart, partFamily];
+const material = "MaterialArt";
+const len = "Laenge";
+const width = "Breite";
+const height = "Hoehe";
+
+const partDataFields = [mmID, name, matchcode, count, sparePart, wearPart, partFamily, material, len, width, height];
 
 function parseStringData(type) {
   fileData.rawData[type] = [];
@@ -228,6 +233,10 @@ function parseFile() {
     [sparePart]: false,
     [wearPart]: false,
     [partFamily]: "",
+    [material]: "",
+    [len]: "",
+    [width]: "",
+    [height]: "",
     children: [],
     level: 0,
   };
@@ -243,6 +252,7 @@ function parseFile() {
     Menge: "1,00",
     PosNr: "10",
   });
+
   for (let obj of fileData.rawData.Menge) {
     let id = Number(obj[mmID]); // get MM-Nummer
 
@@ -267,9 +277,14 @@ function parseFile() {
       return false;
     }
 
+    // add data from "struktur"
     const level = Number(currObj.Ebene);
     dataObject.partData[id].level = level;
-    dataObject.partData[id][matchcode] = currObj.Matchcode;
+    dataObject.partData[id][matchcode] = currObj[matchcode];
+    dataObject.partData[id][material] = currObj[material];
+    dataObject.partData[id][len] = currObj[len];
+    dataObject.partData[id][width] = currObj[width];
+    dataObject.partData[id][height] = currObj[height];
 
     // find all parents
     if (dataObject.evArray.includes(Number(currObj[mmID]))) {
