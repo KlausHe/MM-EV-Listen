@@ -272,7 +272,7 @@ function parseFile() {
     const currObj = fileData.rawData.Struktur[i];
     const id = Number(currObj[mmID]);
     if (dataObject.partData[id] == undefined) {
-      Lbl_missingIDs.KadSetText(`Fehlende Teile ${id.toString().padStart(6, 0)}`);
+      Lbl_missingIDs.KadSetText(`Fehlende Teile ${id.toString().padStart(6, "0")}`);
       document.getElementById("main").classList.add("rotateoOnce");
       return false;
     }
