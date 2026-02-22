@@ -1,3 +1,6 @@
 [submodule "KadUtils"]
 	path = KadUtils
 	url = https://github.com/KlausHe/KadUtils.git
+[submodule "MM-CSS"]
+	path = MM-CSS
+	url = https://github.com/KlausHe/MM-CSS.git
